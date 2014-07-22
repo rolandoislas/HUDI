@@ -14,6 +14,8 @@ public class HudInstaller extends StateBasedApplication {
 	public static int screenHeight;
 	public static int screenWidth;
 	public final static String APP_NAME = "TF2 Hud Installer";
+	public static final int WIDTH = 500;
+	public static final int HEIGHT = 300;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -33,9 +35,9 @@ public class HudInstaller extends StateBasedApplication {
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		screenWidth = gd.getDisplayMode().getWidth();
 		screenHeight = gd.getDisplayMode().getHeight();
-		setPosition(screenWidth / 2 - Constants.WIDTH / 2, screenHeight / 2 - Constants.HEIGHT / 2);
-		setWidth(Constants.WIDTH);
-		setHeight(Constants.HEIGHT);
+		setPosition(screenWidth / 2 - WIDTH / 2, screenHeight / 2 - HEIGHT / 2);
+		setWidth(WIDTH);
+		setHeight(HEIGHT);
 		initialize();
 		addStates();
 		setState(0);

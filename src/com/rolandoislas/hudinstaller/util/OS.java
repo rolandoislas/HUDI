@@ -38,13 +38,18 @@ public class OS {
 	public File getDir(String type) {
 		String sys = getSys();
 		if(sys.equalsIgnoreCase("win")) {
-			return type.equals("tf") ? new File(InstallLocation.TF_CUSTOM_WIN) : new File(InstallLocation.APPDATA_WIN);
+			return type.equals("tf") ? (isWin64() ? new File(InstallLocation.TF_CUSTOM_WIN) : new File(InstallLocation.TF_CUSTOM_WIN_86)) : new File(InstallLocation.APPDATA_WIN);
 		} else if(sys.equalsIgnoreCase("mac")) {
 			return type.equals("tf") ? new File(InstallLocation.TF_CUSTOM_MAC) : new File(InstallLocation.APPDATA_MAC);
 		} else if(sys.equalsIgnoreCase("nix")) {
 			return type.equals("tf") ? new File(InstallLocation.TF_CUSTOM_NIX) : new File(InstallLocation.APPDATA_NIX);
 		}
 		return null;
+	}
+
+	private boolean isWin64() {
+		File file = new File("C:/Program Files (x86)");
+		return file.exists();
 	}
 
 	public File getDir() {

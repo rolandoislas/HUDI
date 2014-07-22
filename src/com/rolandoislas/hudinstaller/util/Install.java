@@ -29,6 +29,7 @@ public class Install {
 	}
 
 	public static void displayError() {
+		installMessage.dispose();
 		new Popup("Could not install custom HUD.", "Install Failed", true);
 	}
 

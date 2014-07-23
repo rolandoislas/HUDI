@@ -49,6 +49,8 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 			progressBar.setValue(100);
 		}
 		if(!updateFailed) {
+			status.setText("Update complete.");
+			progressBar.setValue(100);
 			sba.setState(1);
 		}
 	}
@@ -59,8 +61,6 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 		extractArchive();
 		updateCacheJson();
 		deleteTempararyFiles();
-		status.setText("Update complate.");
-		progressBar.setValue(100);
 	}
 
 	private void deleteTempararyFiles() {

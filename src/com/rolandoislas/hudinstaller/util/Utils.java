@@ -95,8 +95,12 @@ public class Utils {
 		}
 	}
 	
-	public static JsonArray getVersions() {
-		String rawJson = getJsonFromFile(OS.getDir() + "/cache/" + Constants.REPO_NAME + "-" + getCachedCommit() + "/versions.json");
+	public static JsonArray getVersions() throws FileNotFoundException {
+		String versionFile = OS.getDir() + "/cache/" + Constants.REPO_NAME + "-" + getCachedCommit() + "/versions.json";
+		if(!new File(versionFile).exists()) {
+			throw new FileNotFoundException();
+		}
+		String rawJson = getJsonFromFile(versionFile);
 		JsonArray json = jsonParser.parse(rawJson).getAsJsonArray();
 		return json;
 	}

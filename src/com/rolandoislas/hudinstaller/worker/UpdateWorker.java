@@ -40,13 +40,18 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 	private void checkForUpdate() {
 		status.setText("Checking for update.");
 		progressBar.setValue(5);
-		if(isFirstRun() || isUpdateAvaliable()) {
-			status.setText("Update found.");
-			progressBar.setValue(10);
-			doUpdate();
-		} else {
-			status.setText("No update found.");
-			progressBar.setValue(100);
+		try {
+			if(isFirstRun() || isUpdateAvaliable()) {
+				status.setText("Update found.");
+				progressBar.setValue(10);
+				doUpdate();
+			} else {
+				status.setText("No update found.");
+				progressBar.setValue(100);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			doUpdateFailed("Failed to access update site.");
 		}
 		if(!updateFailed) {
 			status.setText("Update complete.");
@@ -119,7 +124,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 		progressBar.setValue(50);
 	}
 
-	private boolean isUpdateAvaliable() {
+	private boolean isUpdateAvaliable() throws IOException {
 		Github github = new Github();
 		String gitCommit = github.getLatestCommit();
 		if(!gitCommit.equals(Utils.getCachedCommit())) {

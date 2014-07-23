@@ -12,22 +12,10 @@ public class JSON {
 	
 	private JsonParser jsonParser = new JsonParser();
 	
-	public JsonElement getJson(String url) {
+	public JsonElement getJson(String url) throws MalformedURLException, IOException {
 		String requestString = url;
-		URL requestURL = null;
-		try {
-			requestURL = new URL(requestString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		}
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(requestURL.openStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		URL requestURL = new URL(requestString);
+		Scanner scanner = new Scanner(requestURL.openStream());
 		String response = scanner.useDelimiter("\\Z").next();
 		JsonElement json = jsonParser.parse(response);
 		scanner.close();

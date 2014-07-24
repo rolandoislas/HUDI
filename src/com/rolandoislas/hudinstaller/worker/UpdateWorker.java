@@ -61,13 +61,16 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 			sba.setState(1);
 		}
 	}
-	
+
 	private void doUpdate() {
-		purgeCache();
-		downloadArchive();
-		extractArchive();
-		updateCacheJson();
-		deleteTempararyFiles();
+		try {
+			purgeCache();
+			downloadArchive();
+			extractArchive();
+			updateCacheJson();
+			deleteTempararyFiles();
+		} catch (IOException e) {
+		}
 	}
 
 	private void deleteTempararyFiles() {
@@ -75,7 +78,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 		Utils.delete(new File(new OS().getDir() + "/temp"));
 	}
 
-	private void updateCacheJson() {
+	private void updateCacheJson() throws IOException {
 		status.setText("Updating cache version data.");
 		JsonObject json = new JsonObject();
 		json.addProperty("commit", latestCommit);
@@ -86,6 +89,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 		} catch (FileNotFoundException e) {
 			doUpdateFailed("Could not write cache version data.");
 			e.printStackTrace();
+			throw new IOException();
 		}
 		progressBar.setValue(85);
 	}
@@ -96,13 +100,14 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 			progressBar.setValue(15);
 	}
 
-	private void extractArchive() {
+	private void extractArchive() throws IOException {
 		status.setText("Extracting update.");
 		try {
 			Utils.unZip(new File(new OS().getDir() + "/temp/cache.zip"), new File(new OS().getDir() + "/cache/"));
 		} catch (IOException e) {
 			doUpdateFailed("Failed extracting archive.");
 			e.printStackTrace();
+			throw e;
 		}
 		progressBar.setValue(80);
 	}
@@ -113,7 +118,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 		progressBar.setValue(100);
 	}
 
-	private void downloadArchive() {
+	private void downloadArchive() throws IOException {
 		status.setText("Downloading update.");
 		try {
 			new Download(new URL(new Github().getCommitArchiveUrl(latestCommit)), new File(new OS().getDir() + "/temp/cache.zip")).get();
@@ -122,6 +127,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 		} catch (IOException e) {
 			doUpdateFailed("Could not download archive.");
 			e.printStackTrace();
+			throw e;
 		}
 		progressBar.setValue(50);
 	}

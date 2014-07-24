@@ -24,6 +24,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 	private StateBasedApplication sba;
 	private String latestCommit;
 	private boolean updateFailed = false;
+	private Github github = new Github();
 
 	public UpdateWorker(StateBasedApplication sba, JTextArea status, JProgressBar progressBar) {
 		this.sba = sba;
@@ -44,6 +45,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 			if(isFirstRun() || isUpdateAvaliable()) {
 				status.setText("Update found.");
 				progressBar.setValue(10);
+				latestCommit = github.getLatestCommit();
 				doUpdate();
 			} else {
 				status.setText("No update found.");
@@ -125,10 +127,8 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 	}
 
 	private boolean isUpdateAvaliable() throws IOException {
-		Github github = new Github();
 		String gitCommit = github.getLatestCommit();
 		if(!gitCommit.equals(Utils.getCachedCommit())) {
-			latestCommit = gitCommit;
 			return true;
 		}
 		return false;

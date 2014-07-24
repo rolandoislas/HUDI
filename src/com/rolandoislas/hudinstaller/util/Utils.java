@@ -13,6 +13,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.rolandoislas.hudinstaller.data.Constants;
 
@@ -29,8 +30,8 @@ public class Utils {
 
 	public static String getCachedCommit() {
 		String rawJson = getJsonFromFile(OS.getDir() + "/cache.json");
-		String json = jsonParser.parse(rawJson).getAsJsonObject().get("commit").getAsString();
-		return json;
+		JsonElement json = jsonParser.parse(rawJson).getAsJsonObject().get("commit");
+		return json.isJsonNull() ? null : json.getAsString();
 	}
 
 	private static String getJsonFromFile(String dir) {

@@ -14,6 +14,7 @@ import java.util.zip.ZipInputStream;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rolandoislas.hudinstaller.data.Constants;
 
@@ -97,6 +98,16 @@ public class Utils {
 	}
 	
 	public static JsonArray getVersions() throws FileNotFoundException {
+		if(Constants.IGNORE_VERSIONS) {
+			JsonArray json = new JsonArray();
+			for(int i = 0; i < Constants.VERSIONS.length; i++) {
+				JsonObject hudInstance = new JsonObject();
+				hudInstance.addProperty("displayName", Constants.VERSIONS[i].getDisplayName());
+				hudInstance.addProperty("versionDirectory", Constants.VERSIONS[i].getInstallDirectory());
+				json.add(hudInstance);
+			}
+			return json;
+		}
 		String versionFile = OS.getDir() + "/cache/" + Constants.REPO_NAME + "-" + getCachedCommit() + "/versions.json";
 		if(!new File(versionFile).exists()) {
 			throw new FileNotFoundException();

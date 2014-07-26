@@ -61,7 +61,9 @@ class InstallWorker extends SwingWorker<Void, Void> {
 	
 	private void installHud() throws IOException {
 		purgeHud();
-		install("base");
+		if(Constants.BASE_DIRECTORY) {
+			install("base");
+		}
 		install(versionDirectory);
 		Install.displayPostInstallMessage();
 	}

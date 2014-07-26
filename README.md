@@ -7,7 +7,7 @@ TF2 Hud Installer provides one click installs for HUDs hosted on public repos. T
 
 ### Respository Directory Tree
 
-All shared files should be placed into the directory `base`. Theme specific files should be placed in another directory alongside `base`.. They can be any name, and will be defined in `versions.json` (see [Versions](#Versions)).
+All shared files should be placed into the directory `base`. Theme specific files should be placed in another directory alongside `base`.. They can be any name, and will be defined in `versions.json` (see [Versions](#versions)).
 
 ```
 -base
@@ -45,12 +45,48 @@ Before compiling you will need to include a `Constants.java` in the package `com
 ```Java
 public class Constants {
 	
-	public static final String VERSION = "1.0.0.0";
+	public static final String VERSION = "1.0.0";
 	
 	public static final String REPO_OWNER = "exammpleuser";
 	public static final String REPO_NAME = "examplehud";
 	public static final String HUD_DIR = "exampleHUD";
 	public static final String DISPLAY_NAME = "Example HUD";
 	
+	public static final boolean BASE_DIRECTORY = false;
+	public static final boolean IGNORE_VERSIONS = true;
+	public static final Versions[] VERSIONS = new Versions[] {new Versions("Example HUD", "theme1")};
+	
 }
 ```
+
+##### VERSION
+
+Version number that is displayed on the title bar: major.minor.revision
+
+##### REPO_OWNER
+
+This should be the username of the repository owner; the same format as the URL.
+
+##### REPO_NAME
+
+This is the repository name. It should be the same format as the URL.
+
+##### HUD_DIR
+
+This is the directory name to use when installing to "tf/custom".
+
+##### DISPLAY_NAME
+
+This name will appear in various prompt and messages in the installer.
+
+##### BASE_DIRECTORY
+
+This will determine whether to install the base install before the theme. Set this to `false` if the repository does not have the supported directory structure.
+
+##### IGNORE_VERSIONS
+
+If the repository does not include [versions.json](#versions) this can be used to disable the check for it. Be sure to properly populate the embedded VERSIONS constants.
+
+##### VERSIONS
+
+This is an array of the Versions class. Versions accepts two Stings as parameters. The first is the display name of the HUD, and the second is the directory (within the repository) of the theme.

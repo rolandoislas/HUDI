@@ -1,7 +1,6 @@
 package com.rolandoislas.hudinstaller.worker;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,7 +9,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
-import com.google.gson.JsonObject;
 import com.rolandoislas.hudinstaller.net.Download;
 import com.rolandoislas.hudinstaller.util.Github;
 import com.rolandoislas.hudinstaller.util.OS;
@@ -80,13 +78,9 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 
 	private void updateCacheJson() throws IOException {
 		status.setText("Updating cache version data.");
-		JsonObject json = new JsonObject();
-		json.addProperty("commit", latestCommit);
-		String text = json.toString();
-		String path = new OS().getDir() + "/cache.json";
 		try {
-			Utils.writeTextFile(text, path);
-		} catch (FileNotFoundException e) {
+			Utils.writeToDataFile(latestCommit, new String[]{"cache", "commit"});
+		} catch (IOException e) {
 			doUpdateFailed("Could not write cache version data.");
 			e.printStackTrace();
 			throw new IOException();
@@ -142,7 +136,7 @@ public class UpdateWorker extends SwingWorker<Void, Void> {
 	
 	private boolean isFirstRun() {
 		OS OS = new OS();
-		File file = new File(OS.getDir() + "/cache.json");
+		File file = new File(OS.getDir() + "/data.json");
 		if(!file.exists()) {
 			return true;
 		}

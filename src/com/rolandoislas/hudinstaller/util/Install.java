@@ -1,6 +1,7 @@
 package com.rolandoislas.hudinstaller.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.SwingWorker;
@@ -9,22 +10,26 @@ import org.apache.commons.io.FileUtils;
 
 import com.rolandoislas.hudinstaller.HudInstaller;
 import com.rolandoislas.hudinstaller.data.Constants;
+import com.rolandoislas.hudinstaller.gui.List;
 import com.rolandoislas.hudinstaller.gui.Popup;
+import com.rolandoislas.hudinstaller.util.state.StateBasedApplication;
 
 public class Install {
 
 	private String versionDirectory;
+	private StateBasedApplication sba;
 	private static String displayName;
 	private static Popup installMessage;
 
-	public Install(String versionDirectory, String displayName) {
+	public Install(String versionDirectory, String displayName, StateBasedApplication sba) {
 		this.versionDirectory = versionDirectory;
 		Install.displayName = displayName;
+		this.sba = sba;
 	}
 
 	public void run() {
 		displayInstallMessage();
-		InstallWorker installWorker = new InstallWorker(versionDirectory);
+		InstallWorker installWorker = new InstallWorker(versionDirectory, displayName, sba);
 		installWorker.execute();
 	}
 
@@ -53,10 +58,14 @@ public class Install {
 class InstallWorker extends SwingWorker<Void, Void> {
 	
 	private String versionDirectory;
+	private String displayName;
+	private StateBasedApplication sba;
 	private static OS OS = new OS();
 
-	public InstallWorker(String versionDirectory) {
+	public InstallWorker(String versionDirectory, String displayName, StateBasedApplication sba) {
 		this.versionDirectory = versionDirectory;
+		this.displayName = displayName;
+		this.sba = sba;
 	}
 	
 	private void installHud() throws IOException {
@@ -65,7 +74,15 @@ class InstallWorker extends SwingWorker<Void, Void> {
 			install("base");
 		}
 		install(versionDirectory);
+		updateInstallData();
 		Install.displayPostInstallMessage();
+	}
+
+	private void updateInstallData() throws FileNotFoundException, IOException {
+		Utils.writeToDataFile(Utils.getCachedCommit(), new String[]{"installed", "commit"});
+		Utils.writeToDataFile(displayName, new String[]{"installed", "displayName"});
+		sba.initState(new List());
+		sba.setState(1);
 	}
 
 	private void install(String string) throws IOException {

@@ -20,6 +20,7 @@ public class List extends JPanel implements ApplicationState {
 	private static final long serialVersionUID = 1L;
 	private static final int ID = 1;
 	private Panel panel;
+	private JLabel lblInstalled;
 	
 	public List() {
 		createComponents();
@@ -36,9 +37,14 @@ public class List extends JPanel implements ApplicationState {
 		
 		panel = new Panel();
 		springLayout.putConstraint(SpringLayout.NORTH, panel, 6, SpringLayout.SOUTH, lblTitle);
-		springLayout.putConstraint(SpringLayout.SOUTH, panel, 261, SpringLayout.SOUTH, lblTitle);
+		springLayout.putConstraint(SpringLayout.SOUTH, panel, 206, SpringLayout.SOUTH, lblTitle);
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, panel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		add(panel);
+		
+		lblInstalled = new JLabel("Installed: ");
+		springLayout.putConstraint(SpringLayout.NORTH, lblInstalled, 10, SpringLayout.SOUTH, panel);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lblInstalled, 0, SpringLayout.HORIZONTAL_CENTER, this);
+		add(lblInstalled);
 	}
 
 	@Override
@@ -48,7 +54,7 @@ public class List extends JPanel implements ApplicationState {
 
 	@Override
 	public Container initialize(StateBasedApplication sba, JFrame frame) {
-		ListWorker listWorker = new ListWorker(panel);
+		ListWorker listWorker = new ListWorker(panel, lblInstalled, sba);
 		listWorker.execute();
 		return this;
 	}

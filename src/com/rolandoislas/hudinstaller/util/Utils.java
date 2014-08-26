@@ -23,25 +23,58 @@ public class Utils {
 	private static JsonParser jsonParser = new JsonParser();
 	private static OS OS = new OS();
 
-	public static void writeTextFile(String text, String path) throws FileNotFoundException {
-		PrintWriter out = new PrintWriter(path);
+	public static void writeToDataFile(String value, String[] path) throws IOException {
+		String dataFile = new OS().getDir() + "/data.json";
+		String rawJson;
+		try {
+			rawJson = getJsonFromFile(dataFile);
+		} catch (FileNotFoundException e) {
+			writeNewDataFile(dataFile);
+		}
+		rawJson = getJsonFromFile(dataFile);
+		JsonObject json = jsonParser.parse(rawJson).getAsJsonObject();
+		
+		if(path[0].equals("cache")) {
+			if(path[1].equals("commit")) {
+				json.getAsJsonObject("cache").addProperty("commit", value);
+			}
+		} else if(path[0].equals("installed")) {
+			if(path[1].equals("commit")) {
+				json.getAsJsonObject("installed").addProperty("commit", value);
+			} else if(path[1].equals("displayName")) {
+				json.getAsJsonObject("installed").addProperty("displayName", value);
+			}
+		}
+		writeTotextFile(json.toString(), dataFile);
+	}
+	
+	private static void writeNewDataFile(String path) throws IOException {
+		JsonObject json = new JsonObject();
+		JsonObject cache = new JsonObject();
+		cache.addProperty("commit", "");
+		json.add("cache", cache);
+		JsonObject installed = new JsonObject();
+		installed.addProperty("commit", "");
+		installed.addProperty("displayName", "");
+		json.add("installed", installed);
+		writeTotextFile(json.toString(), path);
+	}
+
+	private static void writeTotextFile(String text, String path) throws IOException {
+		PrintWriter out = new PrintWriter(new File(path));
 		out.print(text);
 		out.close();
 	}
 
-	public static String getCachedCommit() {
-		String rawJson = getJsonFromFile(OS.getDir() + "/cache.json");
-		JsonElement json = jsonParser.parse(rawJson).getAsJsonObject().get("commit");
+	public static String getCachedCommit() throws FileNotFoundException {
+		String rawJson = getJsonFromFile(OS.getDir() + "/data.json");
+		JsonElement json = jsonParser.parse(rawJson).getAsJsonObject().get("cache").getAsJsonObject().get("commit");
 		return json.isJsonNull() ? null : json.getAsString();
 	}
 
-	private static String getJsonFromFile(String dir) {
-		InputStream input = null;
-		try {
-			input = new FileInputStream(dir);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+	private static String getJsonFromFile(String dir) throws FileNotFoundException {
+		InputStream input = new FileInputStream(dir);
+
 		Scanner scanner = new Scanner(input);
 		String rawJson = scanner.useDelimiter("\\Z").next();
 		scanner.close();
@@ -115,6 +148,14 @@ public class Utils {
 		String rawJson = getJsonFromFile(versionFile);
 		JsonArray json = jsonParser.parse(rawJson).getAsJsonArray();
 		return json;
+	}
+
+	public static String[] getInstalledVersion() throws FileNotFoundException {
+		String dataFile = OS.getDir() + "/data.json";
+		String rawJson = getJsonFromFile(dataFile);
+		JsonObject json = jsonParser.parse(rawJson).getAsJsonObject().get("installed").getAsJsonObject();
+		String[] array = new String[]{json.get("commit").getAsString(), json.get("displayName").getAsString()};
+		return array;
 	}
 	
 }

@@ -8,6 +8,8 @@ import com.rolandoislas.hudinstaller.HudInstaller;
 import java.awt.Component;
 import javax.swing.SpringLayout;
 
+import java.awt.SystemColor;
+
 public class Popup extends JDialog{
 	
 	private static final long serialVersionUID = 1L;
@@ -29,7 +31,8 @@ public class Popup extends JDialog{
 		SpringLayout springLayout = new SpringLayout();
 		getContentPane().setLayout(springLayout);
 		JTextArea textArea = new JTextArea(message);
-		springLayout.putConstraint(SpringLayout.NORTH, textArea, height / 4, SpringLayout.NORTH, getContentPane());
+		textArea.setBackground(SystemColor.menu);
+		springLayout.putConstraint(SpringLayout.NORTH, textArea, 10, SpringLayout.NORTH, getContentPane());
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, textArea, width / 2, SpringLayout.HORIZONTAL_CENTER, this);
 		textArea.setEditable(false);
 		textArea.setAlignmentX(Component.CENTER_ALIGNMENT);

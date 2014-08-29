@@ -35,7 +35,7 @@ public class Install {
 
 	public static void displayError() {
 		installMessage.dispose();
-		new Popup("Could not install custom HUD.", "Install Failed", true);
+		new Popup("Could not install custom HUD.", 450, 70, "Install Failed", true);
 	}
 
 	public static void displayPostInstallMessage() {
@@ -46,11 +46,11 @@ public class Install {
 		message += Constants.DISPLAY_NAME + ": " + Github.ROOT_URL + "/" + Constants.REPO_OWNER + "/" + Constants.REPO_NAME + "/\n";
 		// Installer repo url
 		message += HudInstaller.APP_NAME + ": http://github.com/rolandoislas/tf2-hud-installer/"; 
-		new Popup(message, 450, 150, "Install Complete", true);
+		new Popup(message, 450, 100, "Install Complete", true);
 	}
 
 	private void displayInstallMessage() {
-		installMessage = new Popup("Installing " + displayName + ". Please wait.", "Installing HUD", false);
+		installMessage = new Popup("Installing " + displayName + ". Please wait.", 450, 70, "Installing HUD", false);
 	}
 
 }

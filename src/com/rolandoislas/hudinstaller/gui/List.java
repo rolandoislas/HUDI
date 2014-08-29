@@ -60,7 +60,7 @@ public class List extends JPanel implements ApplicationState {
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new Popup(License.getAboutText(), 450, 200, "About " + HudInstaller.APP_NAME, true);
+				new Popup(License.getAboutText(), 450, 250, "About " + HudInstaller.APP_NAME, true);
 			}
 		});
 		button.setContentAreaFilled(false);

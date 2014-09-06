@@ -43,6 +43,8 @@ public class Utils {
 				json.getAsJsonObject("installed").addProperty("commit", value);
 			} else if(path[1].equals("displayName")) {
 				json.getAsJsonObject("installed").addProperty("displayName", value);
+			} else if(path[1].equals("hudDir")) {
+				json.getAsJsonObject("installed").addProperty("hudDir", value);
 			}
 		}
 		writeTotextFile(json.toString(), dataFile);
@@ -154,8 +156,23 @@ public class Utils {
 		String dataFile = OS.getDir() + "/data.json";
 		String rawJson = getJsonFromFile(dataFile);
 		JsonObject json = jsonParser.parse(rawJson).getAsJsonObject().get("installed").getAsJsonObject();
-		String[] array = new String[]{json.get("commit").getAsString(), json.get("displayName").getAsString()};
+		JsonElement hudDirElement = json.get("hudDir");
+		String hudDir = null;
+		if(hudDirElement != null) {
+			hudDir = hudDirElement.getAsString();
+		}
+		
+		String[] array = new String[]{json.get("commit").getAsString(), json.get("displayName").getAsString(), hudDir};
 		return array;
+	}
+
+	public static String getPreviousHud() throws FileNotFoundException {
+		String[] installed = getInstalledVersion();
+		return installed[2];
+	}
+
+	public static boolean isHudDifferent() throws FileNotFoundException {
+		return !(getPreviousHud() == null || getPreviousHud().equals(Constants.HUD_DIR));
 	}
 	
 }

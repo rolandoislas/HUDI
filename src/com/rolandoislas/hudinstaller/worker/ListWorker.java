@@ -44,7 +44,10 @@ public class ListWorker extends SwingWorker<Void, Void> {
 		}
 		if(!installed[0].equals("")) {
 			String updateMessage;
-			if(installed[0].equals(Utils.getCachedCommit())) {
+			if(Utils.isHudDifferent()) {
+				updateMessage = "Update checking disabled.";
+			}
+			else if(installed[0].equals(Utils.getCachedCommit())) {
 				updateMessage = "Up to date.";
 			} else {
 				updateMessage = "Update avaliable.";

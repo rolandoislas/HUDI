@@ -81,16 +81,20 @@ class InstallWorker extends SwingWorker<Void, Void> {
 	private void updateInstallData() throws FileNotFoundException, IOException {
 		Utils.writeToDataFile(Utils.getCachedCommit(), new String[]{"installed", "commit"});
 		Utils.writeToDataFile(displayName, new String[]{"installed", "displayName"});
+		Utils.writeToDataFile(Constants.HUD_DIR, new String[]{"installed", "hudDir"});
 		sba.initState(new List());
 		sba.setState(1);
 	}
 
 	private void install(String string) throws IOException {
-		FileUtils.copyDirectory(new File(OS.getDir() + "/cache/" + Constants.REPO_NAME + "-" + Utils.getCachedCommit() + "/" + string), OS.getDir("tf"));
+		FileUtils.copyDirectory(new File(OS.getDir() + "/cache/" + Constants.REPO_NAME + "-" + Utils.getCachedCommit() + "/" + string), new File(OS.getDir("tf") + File.separator + Constants.HUD_DIR));
 	}
 
-	private void purgeHud() {
-		Utils.delete(OS.getDir("tf"));
+	private void purgeHud() throws FileNotFoundException {
+		Utils.delete(new File(OS.getDir("tf") + File.separator + Constants.HUD_DIR));
+		if(Utils.isHudDifferent()) {
+			Utils.delete(new File(OS.getDir("tf") + File.separator + Utils.getPreviousHud()));
+		}
 	}
 
 	@Override

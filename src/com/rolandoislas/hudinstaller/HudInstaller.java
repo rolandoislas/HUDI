@@ -13,7 +13,7 @@ public class HudInstaller extends StateBasedApplication {
 
 	public static int screenHeight;
 	public static int screenWidth;
-	public final static String APP_NAME = "TF2 Hud Installer";
+	public final static String APP_NAME = "HUDI";
 	public static final int WIDTH = 500;
 	public static final int HEIGHT = 300;
 

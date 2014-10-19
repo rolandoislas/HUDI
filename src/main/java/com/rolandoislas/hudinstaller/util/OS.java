@@ -1,4 +1,4 @@
-﻿package com.rolandoislas.hudinstaller.util;
+package com.rolandoislas.hudinstaller.util;
 
 import java.io.File;
 

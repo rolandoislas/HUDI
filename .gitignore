@@ -8,4 +8,4 @@
 !resources/
 
 #Ignore constants
-src/com/rolandoislas/hudinstaller/data/Constants.java
+src/main/java/com/rolandoislas/hudinstaller/data/Constants.java

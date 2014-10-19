@@ -6,6 +6,10 @@
 !src/
 !.gitignore
 !resources/
+!build.gradle
+!gradlew
+!gradlew.bat
+!settings.gradle
 
 #Ignore constants
 src/main/java/com/rolandoislas/hudinstaller/data/Constants.java
